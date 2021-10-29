@@ -1,5 +1,5 @@
 # PTPMPT-Group3-chatApp
-Source cua mon hoc Phat trien phan mem phan tan, nhom 3.
+Source của môn Phát triển phần mềm phân tán - nhóm 3.
 
 ## Bài tập lớn: Phát triển phầm mềm phân tán - IT4883Q
 - GVHD: TS. Nguyễn Nhất Hải  
