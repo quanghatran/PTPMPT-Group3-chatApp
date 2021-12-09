@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const config = require("./middleware/config/key");
+const config = require("./config/key");
 
 const mongoose = require("mongoose");
 const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -21,8 +21,6 @@ const { auth } = require("./middleware/auth");
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/chat', require('./routes/chat'));
-app.use('/api/room', require('./routes/room'));
-
 
 
 const multer = require("multer");
