@@ -1,3 +1,12 @@
+// ------
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "*",
+};
+
+//--------------
+
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -15,6 +24,7 @@ const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUn
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 const { Chat } = require("./models/Chat");
 const { auth } = require("./middleware/auth");

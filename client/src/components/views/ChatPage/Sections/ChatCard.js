@@ -3,17 +3,19 @@ import moment from 'moment';
 import { Comment, Tooltip, Avatar } from 'antd';
 
 function ChatCard(props) {
+    // console.log(props.sender.name)
     return (
         <div style={{ width: '100%' }}>
             <Comment
-                author={props.sender.name}
+                author={props.sender ?  props.sender.name : ""}
                 avatar={
                     <Avatar
-                        src={props.sender.image} alt={props.sender.name}
+                        src={props.sender ?  props.sender.image  : ""} 
                     />
                 }
                 content={
-                    props.message.substring(0, 8) === "uploads/" ?
+                    props.message ? (  
+                        props.message.substring(0, 8) === "uploads/" ?
                         // this will be either video or image 
 
                         props.message.substring(props.message.length - 3, props.message.length) === 'mp4' ?
@@ -31,7 +33,8 @@ function ChatCard(props) {
                         :
                         <p>
                             {props.message}
-                        </p>
+                        </p>) : ""
+                   
                 }
                 datetime={
                     <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>

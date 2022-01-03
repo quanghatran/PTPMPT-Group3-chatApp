@@ -35,6 +35,8 @@ function LoginPage(props) {
           .min(6, 'Password must be at least 6 characters')
           .required('Password is required'),
       })}
+
+      // submit
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
           let dataToSubmit = {
@@ -44,7 +46,9 @@ function LoginPage(props) {
 
           dispatch(loginUser(dataToSubmit))
             .then(response => {
+              // console.log("response: ", response)
               if (response.payload.loginSuccess) {
+                  // console.log(response);
                 if (rememberMe === true) {
                   window.localStorage.setItem('rememberMe', values.id);
                 } else {

@@ -21,6 +21,7 @@ router.get("/auth", auth, (req, res) => {
     });
 });
 
+
 router.post("/register", (req, res) => {
 
     const user = new User(req.body);
@@ -48,12 +49,13 @@ router.post("/login", (req, res) => {
 
             user.generateToken((err, user) => {
                 if (err) return res.status(400).send(err);
-                res.cookie("w_authExp", user.tokenExp);
+                // res.cookie("w_authExp", user.tokenExp);
                 res
-                    .cookie("w_auth", user.token)
+                    // .cookie("w_auth", user.token)
                     .status(200)
                     .json({
-                        loginSuccess: true
+                        loginSuccess: true,
+                        w_auth: user.token
                     });
             });
         });

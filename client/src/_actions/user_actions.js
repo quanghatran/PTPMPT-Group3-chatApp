@@ -27,8 +27,8 @@ export function loginUser(dataToSubmit){
     }
 }
 
-export function auth(){
-    const request = axios.get(`${USER_SERVER}/auth`)
+export function auth(w_auth){
+    const request = axios.get(`${USER_SERVER}/auth`, {headers: {'Authorization':  w_auth}})
     .then(response => response.data);
 
     return {
