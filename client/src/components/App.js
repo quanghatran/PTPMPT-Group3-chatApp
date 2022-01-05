@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Switch } from "react-router-dom";
 import Auth from "../hoc/auth";
 // pages for this product
@@ -8,8 +8,16 @@ import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import ChatPage from "./views/ChatPage/ChatPage"
 import NavBar from "./views/NavBar/NavBar";
 import Footer from "./views/Footer/Footer"
+import {connectWithWebSocket} from '../utils/wssConnection/wssConnection'
+import Dashboard from './views/Dashboard/Dashboard';
+import LoginPageCall from './views/LoginPageCall/LoginPageCall';
 
 function App() {
+
+  useEffect(() => {
+    connectWithWebSocket()
+  }, [])
+
   return (
     <Suspense fallback={(<div>Loading...</div>)}>
       <NavBar />
@@ -19,6 +27,8 @@ function App() {
           <Route exact path="/chat" component={Auth(ChatPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/loginPage" component={LoginPageCall} />
         </Switch>
       </div>
       <Footer />

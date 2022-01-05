@@ -3,7 +3,7 @@ import {
     GET_CHATS,
     AFTER_POST_MESSAGE
 } from './types';
-import { CHAT_SERVER } from '../components/Config.js';
+import { CHAT_SERVER } from '../../components/Config.js';
 
 export function getChats(){
     const request = axios.get(`${CHAT_SERVER}/getChats`)
