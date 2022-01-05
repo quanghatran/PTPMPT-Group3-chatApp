@@ -16,6 +16,7 @@ export default function (ComposedClass, reload, adminRoute = null) {
                 document.cookie = `w_auth=${user.loginSucces.w_auth}`;
                 dispatch(auth(user.loginSucces.w_auth)).then(async response => {
                     console.log(response)
+                    localStorage.setItem("name", response.payload.name)
                     // document.cookie = `id=${response.payload._id}`;
                     if (await !response.payload.isAuth) {
                         if (reload) {

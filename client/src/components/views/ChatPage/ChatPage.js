@@ -61,7 +61,7 @@ export class ChatPage extends Component {
 
         formData.append("file", files[0])
 
-        Axios.post('api/chat/uploadfiles', formData, config)
+        Axios.post('/api/chat/uploadfiles', formData, config)
             .then(response => {
                 if (response.data.success) {
                     let chatMessage = response.data.url;
@@ -116,10 +116,10 @@ export class ChatPage extends Component {
         return (
             <React.Fragment>
                 <div>
-                    <p style={{ fontSize: '2rem', textAlign: 'center' }}> Real Time Chat</p>
+                    <p style={{ fontSize: '2rem', textAlign: 'center' }}> Chat App</p>
                 </div>
 
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: "#e7e7e7e7", padding: "30px", borderRadius: "10px", boxShadow:"0 .125rem .25rem rgba(0,0,0,.075)" }}>
                     <div className="infinite-container" style={{ height: '500px', overflowY: 'scroll' }}>
                         {this.props.chats && (
                             this.renderCards()

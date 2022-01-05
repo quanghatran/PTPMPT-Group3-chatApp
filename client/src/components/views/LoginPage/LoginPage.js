@@ -46,7 +46,6 @@ function LoginPage(props) {
 
           dispatch(loginUser(dataToSubmit))
             .then(response => {
-              // console.log("response: ", response)
               if (response.payload.loginSuccess) {
                   // console.log(response);
                 if (rememberMe === true) {

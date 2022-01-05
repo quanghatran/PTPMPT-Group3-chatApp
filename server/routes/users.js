@@ -51,7 +51,7 @@ router.post("/login", (req, res) => {
                 if (err) return res.status(400).send(err);
                 // res.cookie("w_authExp", user.tokenExp);
                 res
-                    // .cookie("w_auth", user.token)
+                    .cookie("w_auth", user.token)
                     .status(200)
                     .json({
                         loginSuccess: true,
