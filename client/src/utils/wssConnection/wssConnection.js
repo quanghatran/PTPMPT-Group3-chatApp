@@ -4,6 +4,7 @@ import * as dashboardActions from '../../store/_actions/dashboardActions';
 import * as webRTCHandler from '../webRTC/webRTCHandler';
 
 const SERVER = 'http://localhost:5000';
+
 const broadcastEventTypes = {
   ACTIVE_USERS: 'ACTIVE_USERS',
   GROUP_CALL_ROOMS: 'GROUP_CALL_ROOMS'
@@ -43,8 +44,11 @@ export const connectWithWebSocket = () => {
   socket.on('webRTC-candidate', (data) => {
     webRTCHandler.handleCandidate(data);
   });
-}
-;
+
+  socket.on('user-hanged-up', () => {
+    webRTCHandler.handleUserHangedUp();
+  });
+};
 
 export const registerNewUser = (username) => {
   socket.emit('register-new-user', {
@@ -67,7 +71,6 @@ export const sendWebRTCOffer = (data) => {
   socket.emit('webRTC-offer', data);
 };
 
-
 export const sendWebRTCAnswer = (data) => {
   socket.emit('webRTC-answer', data);
 };
@@ -76,7 +79,10 @@ export const sendWebRTCCandidate = (data) => {
   socket.emit('webRTC-candidate', data);
 };
 
- 
+export const sendUserHangedUp = (data) => {
+  socket.emit('user-hanged-up', data);
+};
+
 const handleBroadcastEvents = (data) => {
   switch (data.event) {
     case broadcastEventTypes.ACTIVE_USERS:
