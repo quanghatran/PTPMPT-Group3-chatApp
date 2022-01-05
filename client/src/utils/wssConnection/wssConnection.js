@@ -27,6 +27,22 @@ export const connectWithWebSocket = () => {
   socket.on('pre-offer', (data) => {
     webRTCHandler.handlePreOffer(data);
   });
+
+  socket.on('pre-offer-answer', (data) => {
+    webRTCHandler.handlePreOfferAnswer(data);
+  });
+
+  socket.on('webRTC-offer', (data) => {
+    webRTCHandler.handleOffer(data);
+  });
+
+  socket.on('webRTC-answer', (data) => {
+    webRTCHandler.handleAnswer(data);
+  });
+
+  socket.on('webRTC-candidate', (data) => {
+    webRTCHandler.handleCandidate(data);
+  });
 }
 ;
 
@@ -43,6 +59,24 @@ export const sendPreOffer = (data) => {
   socket.emit('pre-offer', data);
 };
 
+export const sendPreOfferAnswer = (data) => {
+  socket.emit('pre-offer-answer', data);
+};
+
+export const sendWebRTCOffer = (data) => {
+  socket.emit('webRTC-offer', data);
+};
+
+
+export const sendWebRTCAnswer = (data) => {
+  socket.emit('webRTC-answer', data);
+};
+
+export const sendWebRTCCandidate = (data) => {
+  socket.emit('webRTC-candidate', data);
+};
+
+ 
 const handleBroadcastEvents = (data) => {
   switch (data.event) {
     case broadcastEventTypes.ACTIVE_USERS:
