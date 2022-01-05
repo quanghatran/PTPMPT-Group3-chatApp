@@ -3,7 +3,7 @@ import { Form, Icon, Input, Button, Row, Col, } from 'antd';
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import moment from "moment";
-import { getChats, afterPostMessage } from "../../../_actions/chat_actions"
+import { getChats, afterPostMessage } from "../../../store/_actions/chat_actions"
 import ChatCard from "./Sections/ChatCard"
 import Dropzone from 'react-dropzone';
 import Axios from 'axios';
