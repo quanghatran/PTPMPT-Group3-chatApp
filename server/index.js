@@ -17,6 +17,20 @@ const io = require("socket.io")(server);
 const config = require("./config/key");
 
 const mongoose = require("mongoose");
+
+// Peerjs
+const {ExpressPeerServer} = require('peer')
+const {v4: uuidv4} = require('uuid')
+const groupCallHandler = require('./groupCallHandler')
+
+const peerServer = ExpressPeerServer(server, {
+  debug: true
+})
+
+app.use('/peerjs', peerServer)
+groupCallHandler.createPeerServerListeners(peerServer);
+
+// ---------------------------
 const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
@@ -63,7 +77,8 @@ app.post("/api/chat/uploadfiles", auth ,(req, res) => {
   })
 });
 
-const peers = [];
+let peers = [];
+let groupCallRooms = [];
 
 const broadcastEventTypes = {
   ACTIVE_USERS: 'ACTIVE_USERS',
@@ -87,14 +102,24 @@ io.on("connection", socket => {
       event: broadcastEventTypes.ACTIVE_USERS,
       activeUsers: peers
     });
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.GROUP_CALL_ROOMS,
+      groupCallRooms
+    });
   });
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
-    
+    peers = peers.filter(peer => peer.socketId !== socket.id);
     io.sockets.emit('broadcast', {
       event: broadcastEventTypes.ACTIVE_USERS,
-      activeUsers: peers.filter(peer => peer.socketId !== socket.id)
+      activeUsers: peers
+    });
+
+    groupCallRooms = groupCallRooms.filter(room => room.socketId !== socket.id);
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.GROUP_CALL_ROOMS,
+      groupCallRooms
     });
   });
 
@@ -138,6 +163,51 @@ io.on("connection", socket => {
 
   socket.on('user-hanged-up', (data) => {
     io.to(data.connectedUserSocketId).emit('user-hanged-up');
+  });
+
+   // listeners related with group call
+   socket.on('group-call-register', (data) => {
+    const roomId = uuidv4();
+    socket.join(roomId);
+
+    const newGroupCallRoom = {
+      peerId: data.peerId,
+      hostName: data.username,
+      socketId: socket.id,
+      roomId: roomId
+    };
+
+    groupCallRooms.push(newGroupCallRoom);
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.GROUP_CALL_ROOMS,
+      groupCallRooms
+    });
+  });
+
+  socket.on('group-call-join-request', (data) => {
+    io.to(data.roomId).emit('group-call-join-request', {
+      peerId: data.peerId,
+      streamId: data.streamId
+    });
+
+    socket.join(data.roomId);
+  });
+
+  socket.on('group-call-user-left', (data) => {
+    socket.leave(data.roomId);
+
+    io.to(data.roomId).emit('group-call-user-left', {
+      streamId: data.streamId
+    });
+  });
+
+  socket.on('group-call-closed-by-host', (data) => {
+    groupCallRooms = groupCallRooms.filter(room => room.peerId !== data.peerId);
+
+    io.sockets.emit('broadcast', {
+      event: broadcastEventTypes.GROUP_CALL_ROOMS,
+      groupCallRooms
+    });
   });
 
   socket.on("Input Chat Message", msg => {
